@@ -5,8 +5,37 @@
         <PlatformTarget>x64</PlatformTarget>
         <UseWindowsForms>true</UseWindowsForms>
         <LangVersion>preview</LangVersion>
+			<!--保存路径-->
+		<BaseOutputPath>D:\ArrowQRCode</BaseOutputPath>
+		<OutputPath>$(BaseOutputPath)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<!-- 禁止在输出路径中附加运行时标识符 -->
+		<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+		<!-- 设置默认中间输出路径，包含目标框架 -->
+		<IntermediateOutputPath>$(MSBuildProjectDirectory)\obj\$(TargetFramework)\</IntermediateOutputPath>
+		<!--版本号迭代-->
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
+		<Deterministic>True</Deterministic>
+		<!--目标平台-->
+		<PlatformTarget>x64</PlatformTarget>
+		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+		<Platforms>x64</Platforms>
     </PropertyGroup>
+	
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
+		<!-- 设置输出路径为自定义文件夹 Arrow2024 -->
+		<OutputPath>$(BaseOutputPath)\Arrow2024\</OutputPath>
+		<DefineConstants>$(Configuration);acad2024</DefineConstants>
+	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-windows'">
+		<!-- 设置输出路径为自定义文件夹 Arrow2025 -->
+		<OutputPath>$(BaseOutputPath)\Arrow2025\</OutputPath>
+		<DefineConstants>$(Configuration);acad2025</DefineConstants>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
+	</PropertyGroup>
+	
     <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0-windows' ">
         <!--<FrameworkReference Include="Microsoft.WindowsDesktop.App" />-->
         <PackageReference Include="AutoCAD.NET" Version="25.0.1" ExcludeAssets="runtime"/>

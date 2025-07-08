@@ -41,7 +41,7 @@ public class BlockQrCoder
     /// <summary>
     /// Gets or sets the foreground color.
     /// </summary>
-    public Color ForegroundColor { get; set; } = Color.FromRgb(0, 0, 0);
+    public Color ForegroundColor { get; set; } = Color.FromRgb(255, 0, 0);
 
     /// <summary>
     /// Creates a new instance of BlockQRCoder (same parameters as QRCodeGenerator.CreateQrCode method).

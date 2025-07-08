@@ -18,10 +18,10 @@ public class Commands
         try
         {
             using var tr = db.TransactionManager.StartTransaction();
-            var blockTable = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
+            using var blockTable = (BlockTable)tr.GetObject(db.BlockTableId, OpenMode.ForRead);
             if (blockTable.Has(dialog.BlockName))
             {
-                ed.WriteMessage($"\nError: a block named '{dialog.BlockName}' already exists.");
+                ed.WriteMessage($"\n错误: 块名 '{dialog.BlockName}' 已经存在.");
                 return;
             }
             var coder = new BlockQrCoder(
@@ -42,11 +42,11 @@ public class Commands
                 br.Layer = dialog.Layer;
                 br.ScaleFactors = new Scale3d(dialog.BlockScale);
                 br.TransformBy(ed.CurrentUserCoordinateSystem);
-                var jig = new QrCodeBlockJig(br, "\nSpecify insertion point: ");
+                var jig = new QrCodeBlockJig(br, "\n指定插入点: ");
                 var result = ed.Drag(jig);
                 if (result.Status == PromptStatus.OK)
                 {
-                    var currentSpace = (BlockTableRecord)
+                    using var currentSpace = (BlockTableRecord)
                         tr.GetObject(db.CurrentSpaceId, OpenMode.ForWrite);
                     currentSpace.AppendEntity(br);
                     tr.AddNewlyCreatedDBObject(br, true);
@@ -62,13 +62,13 @@ public class Commands
 
     private static List<string> GetLayers(Database db, out string clayer)
     {
-        var layers = new List<string>();
-        clayer = null;
+        List<string> layers = [];
+        clayer = string.Empty;
         using var tr = new OpenCloseTransaction();
-        var layerTable = (LayerTable)tr.GetObject(db.LayerTableId, OpenMode.ForRead);
+        using var layerTable = (LayerTable)tr.GetObject(db.LayerTableId, OpenMode.ForRead);
         foreach (ObjectId id in layerTable)
         {
-            var layer = (LayerTableRecord)tr.GetObject(id, OpenMode.ForRead);
+            using var layer = (LayerTableRecord)tr.GetObject(id, OpenMode.ForRead);
             layers.Add(layer.Name);
             if (id == db.Clayer)
                 clayer = layer.Name;
